@@ -1,8 +1,8 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'ImageURL', defaultValue: 'http://ec2-3-143-216-116.us-east-2.compute.amazonaws.com:8080/job/SecondTaskBuild/lastSuccessfulBuild/artifact/secondtask.tar.gz', description: 'Full image URL')
-        string(name: 'VersionURL', defaultValue: 'http://ec2-3-143-216-116.us-east-2.compute.amazonaws.com:8080/job/SecondTaskBuild/lastSuccessfulBuild/artifact/appversion.txt', description: 'Full image URL')
+        string(name: 'ImageURL', defaultValue: 'http://ec2-3-23-127-172.us-east-2.compute.amazonaws.com:8080/job/SecondTaskBuild/lastSuccessfulBuild/artifact/secondtask.tar.gz', description: 'Full image URL')
+        string(name: 'VersionURL', defaultValue: 'http://ec2-3-23-127-172.us-east-2.compute.amazonaws.com:8080/job/SecondTaskBuild/lastSuccessfulBuild/artifact/appversion.txt', description: 'Full image URL')
     }
     stages {
         stage('getFiles') {
