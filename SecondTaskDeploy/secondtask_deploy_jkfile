@@ -20,7 +20,7 @@ pipeline {
                 echo 'Dploying app to cluster'
                 dir('SecondTaskDeploy') {
                     // assumption: aws cli kubectl are installed and cunfigured
-                    sh "kubectl apply -f secondtask -aws.yaml --kubeconfig=kubeconfig.EKSClustertest.yaml"
+                    sh "kubectl apply -f secondtask-aws.yaml --kubeconfig=kubeconfig.EKSClustertest.yaml"
                 }
             }
         }
