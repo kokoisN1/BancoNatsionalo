@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+    stages {
+        stage('gitpull') {
+            steps {
+                git branch: 'main', credentialsId: 'git_rsa', url: 'git@github.com:kokoisN1/BancoNatsionalo.git'
+            }
+        }
+        stage('StartEKSCluster') {
+            steps {
+                echo 'Starting Cluster'
+                dir('SecondTaskDeploy') {
+                    // assumption: eksctl is installed and cunfigured 
+                    sh "eksctl create cluster --kubeconfig=kubeconfig.EKSClustertest.yaml -f eksctlclusterCreate.yaml"
+                }
+            }
+        }
+        stage('DepolyApp') {
+            steps {
+                echo 'Dploying app to cluster'
+                dir('SecondTaskDeploy') {
+                    // assumption: aws cli kubectl are installed and cunfigured
+                    sh "kubectl apply -f secondtask -aws.yaml --kubeconfig=kubeconfig.EKSClustertest.yaml"
+                }
+            }
+        }
+    }
+}

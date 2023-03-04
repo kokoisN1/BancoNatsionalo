@@ -1,0 +1,68 @@
+apiVersion: eksctl.io/v1alpha5
+cloudWatch:
+  clusterLogging: {}
+iam:
+  vpcResourceControllerPolicy: true
+  withOIDC: false
+kind: ClusterConfig
+managedNodeGroups:
+- amiFamily: AmazonLinux2
+  desiredCapacity: 3
+  disableIMDSv1: false
+  disablePodIMDS: false
+  iam:
+    withAddonPolicies:
+      albIngress: false
+      appMesh: false
+      appMeshPreview: false
+      autoScaler: false
+      certManager: false
+      cloudWatch: false
+      ebs: true
+      efs: false
+      externalDNS: false
+      fsx: false
+      imageBuilder: false
+      xRay: false
+  instanceSelector: {}
+  instanceType: t2.micro
+  labels:
+    alpha.eksctl.io/cluster-name: EKSClustertest
+    alpha.eksctl.io/nodegroup-name: ng-4aba8a47
+  maxSize: 5
+  minSize: 3
+  name: ng-4aba8a47
+  privateNetworking: false
+  securityGroups:
+    withLocal: null
+    withShared: null
+  ssh:
+    allow: true
+    enableSsm: true
+    publicKeyPath: "FullAdmin"
+  tags:
+    alpha.eksctl.io/nodegroup-name: ng-4aba8a47
+    alpha.eksctl.io/nodegroup-type: managed
+  volumeIOPS: 3000
+  volumeSize: 80
+  volumeThroughput: 125
+  volumeType: gp3
+metadata:
+  name: EKSClustertest
+  region: us-east-2
+  version: "1.24"
+privateCluster:
+  enabled: false
+vpc:
+  id: "vpc-0d8d14766b48b95fa"
+  subnets:
+    private:
+      us-east-2a:
+          id: "subnet-0c93a12ce1315e299"
+      us-east-2c:
+          id: "subnet-0b786ee2ec85d3e7a"
+    public:
+      us-east-2a:
+          id: "subnet-0095e92793314869a"
+      us-east-2c:
+          id: "subnet-05773a5cffbdc70e6"

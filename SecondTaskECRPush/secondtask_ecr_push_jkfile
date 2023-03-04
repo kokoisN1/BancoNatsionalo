@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'ImageURL', defaultValue: 'http://ec2-3-143-216-116.us-east-2.compute.amazonaws.com:8080/job/SecondTaskBuild/lastSuccessfulBuild/artifact/secondtask.tar.gz', description: 'Full image URL')
+        string(name: 'VersionURL', defaultValue: 'http://ec2-3-143-216-116.us-east-2.compute.amazonaws.com:8080/job/SecondTaskBuild/lastSuccessfulBuild/artifact/appversion.txt', description: 'Full image URL')
+    }
+    stages {
+        stage('getFiles') {
+            steps {
+                cleanWs()
+                // note that the password here is a token - not the user actual password
+                withCredentials([usernamePassword(credentialsId: 'RemoteServerHttpAuth', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    sh "wget --auth-no-challenge --user ${username} --password  ${password} ${VersionURL}"
+                    sh "wget --auth-no-challenge --user ${username} --password  ${password} ${ImageURL}"
+                }
+                load "appversion.txt"
+                sh "echo ${env.version}"
+                sh "docker load < secondtask.tar.gz"
+                script {
+                    // The native docker push does not work - I tried to figure this out and gave up and did it the cli/traditional way.
+                    sh "aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 591994479995.dkr.ecr.us-east-2.amazonaws.com"
+                    sh "docker tag secondtask:${env.version} 591994479995.dkr.ecr.us-east-2.amazonaws.com/secondtask:${env.version}"
+                    sh "docker push 591994479995.dkr.ecr.us-east-2.amazonaws.com/secondtask:${env.version}"
+                    //   docker.withRegistry('https://591994479995.dkr.ecr.us-east-2.amazonaws.com/secondtask/', "ecr:us-east-2:AWS") {ocker.withRegistry(credentialsId: 'AWSup', url: 'https://591994479995.dkr.ecr.us-east-2.amazonaws.com/secondtask'){
+                    //      def myImg = docker.image("secondtask:${env.version}")
+                    //      docker.image("secondtask:${env.version}").push()
+                    //      myImg.push()
+                    //}
+                }
+            }
+        }
+    }
+}

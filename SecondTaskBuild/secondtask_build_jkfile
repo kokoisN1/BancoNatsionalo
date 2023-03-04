@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    stages {
+        stage('gitpClone') {
+            steps {
+                git branch: 'main', credentialsId: 'git_rsa', url: 'git@github.com:kokoisN1/BancoNatsionalo.git'
+            }
+        }
+        stage('buildapp') {
+            steps {
+                dir('SecondTaskBuild') {
+                    echo 'Running docker build'
+                    script {
+                        dockerImage = docker.build "secondtask:${env.BUILD_ID}"
+                    }
+                    echo 'Done docker build'
+                }
+            }
+        }
+        stage('exportapp') {
+            steps {
+                echo 'Running docker save'
+                sh "docker save secondtask:${env.BUILD_ID} | gzip > secondtask.tar.gz"
+                archiveArtifacts artifacts: "secondtask.tar.gz", followSymlinks: false
+
+                // this is abit unnecessary - the dockr save include the build version - but it makes the work on the other easier  
+                sh "echo env.version=\"${env.BUILD_ID}\" > appversion.txt"  
+                archiveArtifacts artifacts: "appversion.txt", followSymlinks: false
+                echo 'Done docker save and archive'
+            }
+        }
+    }
+}
