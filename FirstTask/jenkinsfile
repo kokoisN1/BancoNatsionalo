@@ -10,7 +10,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        celanWs()
+        cleanWs()
         dir('FirstTask/pythonapp') {
             
             //git 'https://github.com/my-repo.git'
