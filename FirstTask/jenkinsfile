@@ -12,7 +12,7 @@ pipeline {
       steps {
         dir('FirstTask/pythonapp') {
             //git 'https://github.com/my-repo.git'
-            sh 'pip install -r requirements.txt'
+            sh 'pip3 install -r requirements.txt'
             sh 'zip -r ../function.zip ./*'
         }
       }
