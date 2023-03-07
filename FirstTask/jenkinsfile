@@ -36,8 +36,17 @@ pipeline {
                     if (functionExists) {
                           echo "Function already exists"
                           sh 'aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip --publish'
-                          sleep(10)
-                          sh 'aws lambda update-function-configuration --function-name my-function --runtime python3.9'
+                          sleeploop=3
+                          while (sleeploop > 0) {
+                              try {
+                                  sh 'aws lambda update-function-configuration --function-name my-function --runtime python3.9'
+                                  sleeploop = -1 // stop the loop
+                              } catch (Exception e) {
+                                  echo 'Retying ... in 10 seconds' + e.toString()
+                              }
+                              sleep(10)
+                              sleeploop = sleeploop - 1
+                          }
                     } else {
                           echo "Function does not exist. Creating..."
                           sh(script: """
