@@ -48,6 +48,7 @@ pipeline {
                             --environment Variables="{BUCKET_NAME=my-bucket}"
                         """)
                     }
+              }
               sh 'aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip --publish'
               sh 'aws lambda update-function-configuration --function-name my-function --runtime python3.9'
             }
