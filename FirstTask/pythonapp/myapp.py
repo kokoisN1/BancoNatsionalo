@@ -5,8 +5,8 @@ s3 = boto3.client('s3')
 app = Flask(__name__)
 
 @app.route('/')
-def index():
-    s3_bucket_name = 'BL'
+def index1():
+    s3_bucket_name = 'fbgbl'
     s3_file = 'FileFromS3.txt'
 
     response = s3.get_object(Bucket=s3_bucket_name, Key=s3_file)

@@ -34,23 +34,22 @@ pipeline {
                     def functionExists = sh(script: "aws lambda get-function --function-name ${functionName}", returnStatus: true) == 0
 
                     if (functionExists) {
-                        echo "Function already exists"
+                          echo "Function already exists"
+                          sh 'aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip --publish'
+                          sh 'aws lambda update-function-configuration --function-name my-function --runtime python3.9'
                     } else {
-                        echo "Function does not exist. Creating..."
-
-                        sh(script: """
-                            aws lambda create-function \
-                            --function-name ${functionName} \
-                            --handler index.handler \
-                            --runtime python3.9 \
-                            --role arn:aws:iam::722738472774:role/iam_for_lambda \
-                            --zip-file fileb://function.zip \
-                            --environment Variables="{BUCKET_NAME=my-bucket}"
-                        """)
+                          echo "Function does not exist. Creating..."
+                          sh(script: """
+                              aws lambda create-function \
+                              --function-name ${functionName} \
+                              --handler index.handler \
+                              --runtime python3.9 \
+                              --role arn:aws:iam::722738472774:role/iam_for_lambda \
+                              --zip-file fileb://function.zip \
+                              --environment Variables="{BUCKET_NAME=my-bucket}"
+                          """)
                     }
               }
-              sh 'aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip --publish'
-              sh 'aws lambda update-function-configuration --function-name my-function --runtime python3.9'
             }
         }
       }
