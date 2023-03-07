@@ -36,6 +36,7 @@ pipeline {
                     if (functionExists) {
                           echo "Function already exists"
                           sh 'aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip --publish'
+                          sleep(10)
                           sh 'aws lambda update-function-configuration --function-name my-function --runtime python3.9'
                     } else {
                           echo "Function does not exist. Creating..."
