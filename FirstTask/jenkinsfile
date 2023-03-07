@@ -21,7 +21,10 @@ pipeline {
     stage('Deploy Lambda Function') {
       steps {
         dir('FirstTask') {
-            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+            withCredentials([[  $class           : 'AmazonWebServicesCredentialsBinding',
+                                credentialsId    : 'aws-access-key-id',
+                                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
               sh 'aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip --publish'
               sh 'aws lambda update-function-configuration --function-name my-function --runtime python3.9'
             }
