@@ -1,8 +1,13 @@
 provider "aws" {
-  region = "us-east-2" 
+  region = "${var.region}"
   access_key = "${var.AWS_ACCESS_KEY_ID}"
   secret_key = "${var.AWS_SECRET_ACCESS_KEY}"
 }
+
+variable region {}
+variable AWS_ACCESS_KEY_ID {}
+variable AWS_SECRET_ACCESS_KEY {}
+
 
 resource "aws_s3_bucket" "example" {
   bucket = "fbgbl"
