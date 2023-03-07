@@ -59,7 +59,10 @@ pipeline {
     stage('Create API Gateway with Terraform') {
       steps {
         dir('FirstTask') {
-            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+            withCredentials([[  $class           : 'AmazonWebServicesCredentialsBinding',
+                                credentialsId    : 'aws-access-key-id',
+                                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
               sh 'terraform init'
               sh 'terraform apply -auto-approve'
             }
@@ -70,7 +73,10 @@ pipeline {
     stage('Deploy API Gateway') {
       steps {
         dir('FirstTask') {
-            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+            withCredentials([[  $class           : 'AmazonWebServicesCredentialsBinding',
+                                credentialsId    : 'aws-access-key-id',
+                                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
               sh 'terraform apply -auto-approve'
             }
         }
