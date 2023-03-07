@@ -1,5 +1,7 @@
 provider "aws" {
   region = "us-east-2" 
+  access_key = "${var.AWS_ACCESS_KEY_ID}"
+  secret_key = "${var.AWS_SECRET_ACCESS_KEY}"
 }
 
 resource "aws_s3_bucket" "example" {
@@ -15,7 +17,7 @@ resource "aws_lambda_function" "example" {
   filename         = "function.zip"
   function_name    = "my-function"
   role             = aws_iam_role.example.arn
-  handler          = "index.handler"
+  handler          = "myapp.index"
   runtime          = "python3.9"
   source_code_hash = filebase64sha256("function.zip")
 
