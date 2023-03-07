@@ -22,48 +22,48 @@ pipeline {
       }
     }
     
-    stage('Deploy Lambda Function') {
-      steps {
-        dir('FirstTask') {
-            withCredentials([[  $class           : 'AmazonWebServicesCredentialsBinding',
-                                credentialsId    : 'aws-access-key-id',
-                                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-              script {
-                    def functionName = "my-function"
-                    def functionExists = sh(script: "aws lambda get-function --function-name ${functionName}", returnStatus: true) == 0
-
-                    if (functionExists) {
-                          echo "Function already exists"
-                          sh 'aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip --publish'
-                          sleeploop=3
-                          while (sleeploop > 0) {
-                              try {
-                                  sh 'aws lambda update-function-configuration --function-name my-function --runtime python3.9'
-                                  sleeploop = -1 // stop the loop
-                              } catch (Exception e) {
-                                  echo 'Retying ... in 10 seconds' + e.toString()
-                              }
-                              sleep(10)
-                              sleeploop = sleeploop - 1
-                          }
-                    } else {
-                          echo "Function does not exist. Creating..."
-                          sh(script: """
-                              aws lambda create-function \
-                              --function-name ${functionName} \
-                              --handler index.handler \
-                              --runtime python3.9 \
-                              --role arn:aws:iam::722738472774:role/iam_for_lambda \
-                              --zip-file fileb://function.zip \
-                              --environment Variables="{BUCKET_NAME=my-bucket}"
-                          """)
-                    }
-              }
-            }
-        }
-      }
-    }
+//    stage('Deploy Lambda Function') {
+//    steps {
+//      dir('FirstTask') {
+//          withCredentials([[  $class           : 'AmazonWebServicesCredentialsBinding',
+//                              credentialsId    : 'aws-access-key-id',
+//                              accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+//                              secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+//            script {
+//                  def functionName = "my-function"
+//                  def functionExists = sh(script: "aws lambda get-function --function-name ${functionName}", returnStatus: true) == 0
+//
+//                  if (functionExists) {
+//                        echo "Function already exists"
+//                        sh 'aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip --publish'
+//                        sleeploop=3
+//                        while (sleeploop > 0) {
+//                            try {
+//                                sh 'aws lambda update-function-configuration --function-name my-function --runtime python3.9'
+//                                sleeploop = -1 // stop the loop
+//                            } catch (Exception e) {
+//                                echo 'Retying ... in 10 seconds' + e.toString()
+//                            }
+//                            sleep(10)
+//                            sleeploop = sleeploop - 1
+//                        }
+//                  } else {
+//                        echo "Function does not exist. Creating..."
+//                        sh(script: """
+//                            aws lambda create-function \
+//                            --function-name ${functionName} \
+//                            --handler myapp.index \
+//                            --runtime python3.9 \
+//                            --role arn:aws:iam::722738472774:role/iam_for_lambda \
+//                            --zip-file fileb://function.zip \
+//                            --environment Variables="{BUCKET_NAME=my-bucket}"
+//                        """)
+//                  }
+//            }
+//          }
+//      }
+//    }
+//  }
     
     stage('Create API Gateway with Terraform') {
       steps {
