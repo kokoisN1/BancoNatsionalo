@@ -51,12 +51,7 @@ resource "aws_iam_role" "example" {
 }
 
 resource "aws_iam_role_policy_attachment" "example" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.example.name
-}
-
-resource "aws_iam_role_policy_attachment2" "example" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonS3ReadOnlyAccess"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole,arn:aws:iam::aws:policy/service-role/AmazonS3ReadOnlyAccess"
   role       = aws_iam_role.example.name
 }
 
