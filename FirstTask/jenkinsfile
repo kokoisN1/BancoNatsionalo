@@ -8,6 +8,12 @@ pipeline {
   //}
   
   stages {
+    stage('Git') {
+        steps {
+            cleanWs()
+            checkout scm
+        }
+    }
     stage('Build') {
       steps {
         dir('FirstTask/pythonapp') {
