@@ -53,7 +53,7 @@ resource "aws_iam_role" "example" {
 resource "aws_iam_role_policy_attachment" "example" {
     for_each = toset([
         "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "arn:aws:iam::aws:policy/service-role/AmazonS3ReadOnlyAccess""
+        "arn:aws:iam::aws:policy/service-role/AmazonS3ReadOnlyAccess"
       ])
 
     policy_arn = each.value
