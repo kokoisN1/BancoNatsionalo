@@ -18,10 +18,16 @@ resource "aws_s3_bucket" "example" {
   }
 }
 
+resource "aws_iam_policy" "policy" {
+  name        = "policy-s3-access"
+  description = "Aa s3 access policy"
+  policy      = "${file("policys3bucket.json")}"
+}
+
 resource "aws_lambda_function" "example" {
   filename         = "function.zip"
   function_name    = "my-function"
-  role             = aws_iam_role.example.arn
+  role             = aws_iam_role.example.arnaws_iam_policy_attachment
   handler          = "myapp.index"
   runtime          = "python3.9"
   source_code_hash = filebase64sha256("function.zip")
@@ -45,9 +51,23 @@ resource "aws_iam_role" "example" {
         Principal = {
           Service = "lambda.amazonaws.com"
         }
+      },
+      {
+         "Action": "sts:AssumeRole",
+         "Effect": "Allow",
+         "Principal": {
+           "Service": "ec2.amazonaws.com"
+         },
+         "Sid": ""
       }
     ]
   })
+}
+
+resource "aws_iam_policy_attachment" "example" {
+  name       = "test-attachment"
+  roles      = ["${aws_iam_role.example.name}"]
+  policy_arn = "${aws_iam_policy.policy.arn}"
 }
 
 resource "aws_iam_role_policy_attachment" "example" {
