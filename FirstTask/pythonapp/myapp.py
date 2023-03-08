@@ -5,7 +5,7 @@ s3 = boto3.client('s3')
 app = Flask(__name__)
 
 @app.route('/')
-def index():
+def index(event, lambda_context):
     s3_bucket_name = 'fbgbl'
     s3_file = 'FileFromS3.txt'
 
