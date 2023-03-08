@@ -111,6 +111,17 @@ resource "aws_api_gateway_deployment" "example" {
   stage_name  = "dev"
 }
 
+locals {
+  object_source = "${path.module}/FileFromS3.txt"
+}
+
+resource "aws_s3_object" "file_upload" {
+  bucket      = aws_s3_bucket.example.bucket
+  key         = "FileFromS3.txt"
+  source      = local.object_source
+  source_hash = filemd5(local.object_source)
+}
+
 output "api_gateway_url" {
   value = aws_api_gateway_deployment.example.invoke_url
 }
