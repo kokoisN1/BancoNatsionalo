@@ -22,7 +22,7 @@ resource "aws_lambda_function" "example" {
   filename         = "function.zip"
   function_name    = "my-function"
   role             = aws_iam_role.example.arn
-  handler          = "index.myapp"
+  handler          = "myapp.index"
   runtime          = "python3.9"
   source_code_hash = filebase64sha256("function.zip")
 
