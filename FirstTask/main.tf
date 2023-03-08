@@ -71,7 +71,7 @@ resource "aws_iam_policy_attachment" "example" {
 }
 
 resource "aws_iam_role_policy_attachment" "example" {
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
     role       = aws_iam_role.example.name
 }
 
