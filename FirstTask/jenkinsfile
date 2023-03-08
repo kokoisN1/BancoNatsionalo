@@ -27,6 +27,7 @@ pipeline {
             //pip install --target ./package -r requirements.txt
             
             //sh 'pip3 install requests -t .'
+            sh 'pip3 install --terget . -r requirements.txt'
             sh 'zip -r ../function.zip ./*'
         }
       }
