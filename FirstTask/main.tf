@@ -53,7 +53,7 @@ resource "aws_iam_role" "example" {
 resource "aws_iam_role_policy_attachment" "example" {
     for_each = toset([
         "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "arn:aws:iam::aws:policy/service-role/my-lambda-role-4-s3-ro"
+        "arn:aws:iam::722738472774:role/my-lambda-role-4-s3-ro"
       ])
 
     policy_arn = each.value
