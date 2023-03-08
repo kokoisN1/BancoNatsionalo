@@ -18,6 +18,12 @@ resource "aws_s3_bucket" "example" {
   }
 }
 
+resource "aws_iam_policy" "policy" {
+  name        = "policy-s3-access"
+  description = "Aa s3 access policy"
+  policy      = "${file("policys3bucket.json")}"
+}
+
 resource "aws_lambda_function" "example" {
   filename         = "function.zip"
   function_name    = "my-function"
@@ -65,7 +71,7 @@ resource "aws_iam_policy_attachment" "example" {
 }
 
 resource "aws_iam_role_policy_attachment" "example" {
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaExecute"
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
     role       = aws_iam_role.example.name
 }
 
