@@ -18,12 +18,6 @@ resource "aws_s3_bucket" "example" {
   }
 }
 
-resource "aws_iam_policy" "policy" {
-  name        = "policy-s3-access"
-  description = "Aa s3 access policy"
-  policy      = "${file("policys3bucket.json")}"
-}
-
 resource "aws_lambda_function" "example" {
   filename         = "function.zip"
   function_name    = "my-function"
@@ -70,8 +64,15 @@ resource "aws_iam_policy_attachment" "example" {
   policy_arn = "${aws_iam_policy.policy.arn}"
 }
 
+resource "aws_lambda_permission" "post_session_trigger" {
+     statement_id  = "Allow_My_Post_Session_Invoke"
+     action        = "lambda:InvokeFunction"
+     function_name = "${aws_lambda_function.init_function.function_name}"
+     principal     = "apigateway.amazonaws.com"
+     source_arn = "arn:aws:execute-api:us-east-1:${var.account_id}:${var.post_session_id}/*/POST/aa/ual/session"}
+     
 resource "aws_iam_role_policy_attachment" "example" {
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaExecute"
     role       = aws_iam_role.example.name
 }
 
