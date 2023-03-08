@@ -55,6 +55,12 @@ resource "aws_iam_role_policy_attachment" "example" {
   role       = aws_iam_role.example.name
 }
 
+resource "aws_iam_role_policy_attachment2" "example" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonS3ReadOnlyAccess"
+  role       = aws_iam_role.example.name
+}
+
+
 resource "aws_api_gateway_rest_api" "example" {
   name = "my-api"
 }
