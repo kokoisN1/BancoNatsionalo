@@ -83,6 +83,10 @@ resource "aws_api_gateway_integration" "example" {
 
 resource "aws_api_gateway_deployment" "example" {
   rest_api_id = aws_api_gateway_rest_api.example.id
+  depends_on = [
+        aws_api_gateway_method.example,
+        aws_api_gateway_integration.example
+      ]
   stage_name  = "dev"
 }
 
