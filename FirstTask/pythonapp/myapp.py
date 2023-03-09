@@ -14,7 +14,7 @@ def index(event, lambda_context):
     file_content = response['Body'].read().decode('utf-8')
     return {'statusCode': 200,
             'body': json.dumps({'file_content': file_content}),
-            'isBase64Encoded':false}
+            'isBase64Encoded':'false'}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
