@@ -102,6 +102,28 @@ resource "aws_api_gateway_integration" "example" {
   uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${aws_lambda_function.example.arn}/invocations"
 }
 
+
+# This setup took alot of digging to find !
+resource "aws_lambda_permission" "apigw" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.example.arn}"
+  principal     = "apigateway.amazonaws.com"
+
+  #--------------------------------------------------------------------------------
+  # Per deployment
+  #--------------------------------------------------------------------------------
+  # The /*/*  grants access from any method on any resource within the deployment.
+  # source_arn = "${aws_api_gateway_deployment.test.execution_arn}/*/*"
+
+  #--------------------------------------------------------------------------------
+  # Per API
+  #--------------------------------------------------------------------------------
+  # The /*/*/* part allows invocation from any stage, method and resource path
+  # within API Gateway REST API.
+  source_arn    = "${aws_api_gateway_rest_api.example.execution_arn}/*/*/*"
+}
+
 resource "aws_api_gateway_deployment" "example" {
   rest_api_id = aws_api_gateway_rest_api.example.id
   depends_on = [
