@@ -1,7 +1,6 @@
 import boto3
 from flask import Flask
 import json
-}
 
 s3 = boto3.client('s3')
 app = Flask(__name__)
